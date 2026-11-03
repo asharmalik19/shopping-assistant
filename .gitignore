@@ -1,0 +1,4 @@
+/planning/learner-profile.md
+.env
+.env.*
+!.env.example
