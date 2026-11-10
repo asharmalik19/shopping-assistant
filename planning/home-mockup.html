@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Mockup</title>
+<style>
+  :root {
+    --coral: #FF385C;
+    --coral-dark: #E31C5F;
+    --ink: #222222;
+    --muted: #717171;
+    --line: #EBEBEB;
+    --bg: #FFFFFF;
+    --soft: #F7F7F7;
+    --buy: #008A05;
+    --buy-bg: #E8F5E9;
+    --close: #B45309;
+    --close-bg: #FEF3E2;
+    --skip: #5E5E5E;
+    --skip-bg: #F0F0F0;
+    --shadow: 0 6px 16px rgba(0,0,0,.12);
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #EDEDED;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Nunito Sans", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    display: flex; justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .phone {
+    width: 390px; max-width: 100%;
+    background: var(--bg);
+    border-radius: 44px;
+    box-shadow: 0 30px 60px rgba(0,0,0,.18);
+    overflow: hidden;
+    position: relative;
+    border: 10px solid #111;
+  }
+  .status { display: flex; justify-content: space-between; padding: 14px 24px 0; font-size: 15px; font-weight: 600; }
+  .scroll { padding: 8px 20px 110px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 20px; }
+  header h1 { font-size: 28px; font-weight: 800; letter-spacing: -.4px; }
+  header p { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg,#FFB4A2,#E5989B); display: grid; place-items: center; color: #fff; font-weight: 700; }
+
+  /* Hero trip card */
+  .trip { border-radius: 20px; box-shadow: var(--shadow); padding: 20px; border: 1px solid var(--line); }
+  .live { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--coral); text-transform: uppercase; letter-spacing: .6px; }
+  .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 0 4px rgba(255,56,92,.18); }
+  .trip h2 { font-size: 22px; font-weight: 700; margin: 8px 0 4px; letter-spacing: -.2px; }
+  .trip .meta { color: var(--muted); font-size: 14px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .chip { border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 13px; color: var(--ink); font-weight: 600; background: var(--soft); }
+  .cta {
+    margin-top: 18px; width: 100%; border: 0; cursor: pointer;
+    background: linear-gradient(90deg, #E61E4D 0%, #E31C5F 50%, #D70466 100%);
+    color: #fff; font-size: 18px; font-weight: 700; border-radius: 14px;
+    padding: 18px; display: flex; gap: 10px; align-items: center; justify-content: center;
+  }
+  .cta svg { width: 24px; height: 24px; }
+  .done { margin-top: 12px; width: 100%; background: none; border: 0; font-size: 15px; font-weight: 600; text-decoration: underline; color: var(--ink); cursor: pointer; padding: 6px; }
+
+  section { margin-top: 32px; }
+  .sh { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .sh h3 { font-size: 20px; font-weight: 700; letter-spacing: -.2px; }
+  .sh a { font-size: 14px; font-weight: 600; color: var(--ink); }
+
+  /* Bought row */
+  .bought { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .bought::-webkit-scrollbar { display: none; }
+  .item { flex: 0 0 140px; }
+  .tile { height: 160px; border-radius: 14px; display: grid; place-items: center; position: relative; }
+  .tile svg { width: 72%; height: 72%; }
+  .tag { position: absolute; top: 10px; left: 10px; background: #fff; border-radius: 999px; padding: 3px 9px; font-size: 12px; font-weight: 700; color: var(--ink); box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+  .item .name { font-size: 15px; font-weight: 600; margin-top: 8px; }
+  .item .sub { font-size: 13px; color: var(--muted); }
+  .add { border: 1.5px dashed #DDDDDD; color: var(--muted); font-size: 13px; font-weight: 600; flex-direction: column; gap: 6px; display: flex; align-items: center; justify-content: center; }
+
+  /* Verdicts */
+  .verdict { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .verdict:last-child { border-bottom: 0; }
+  .vthumb { flex: 0 0 72px; height: 72px; border-radius: 12px; display: grid; place-items: center; }
+  .vthumb svg { width: 70%; height: 70%; }
+  .vbody { flex: 1; min-width: 0; }
+  .vtop { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .vtop strong { font-size: 15px; }
+  .pill { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+  .pill.buy { background: var(--buy-bg); color: var(--buy); }
+  .pill.close { background: var(--close-bg); color: var(--close); }
+  .pill.skip { background: var(--skip-bg); color: var(--skip); }
+  .why { font-size: 14px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  .swatches { display: inline-flex; gap: 4px; vertical-align: middle; margin-left: 4px; }
+  .swatches i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.1); }
+  .time { font-size: 12px; color: #B0B0B0; margin-top: 4px; }
+
+  /* Profile */
+  .profile { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .prow { display: flex; align-items: center; gap: 14px; padding: 16px; border-bottom: 1px solid var(--line); }
+  .prow:last-child { border-bottom: 0; }
+  .picon { width: 44px; height: 44px; border-radius: 12px; background: var(--soft); display: grid; place-items: center; flex: 0 0 44px; }
+  .picon svg { width: 24px; height: 24px; stroke: var(--ink); }
+  .plabel { font-size: 13px; color: var(--muted); }
+  .pval { font-size: 16px; font-weight: 600; margin-top: 1px; }
+  .skin { width: 44px; height: 44px; border-radius: 50%; background: #C68B59; box-shadow: inset 0 0 0 3px #fff, 0 0 0 1px var(--line); flex: 0 0 44px; }
+  .styles { display: flex; gap: 8px; margin-top: 6px; }
+  .style { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px 3px 3px; font-size: 13px; font-weight: 600; }
+  .style span { width: 22px; height: 22px; border-radius: 50%; }
+  .edit { margin-left: auto; font-size: 14px; font-weight: 600; text-decoration: underline; }
+
+  /* Tab bar */
+  nav { position: absolute; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--line); display: flex; justify-content: space-around; padding: 10px 0 26px; }
+  nav div { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--muted); }
+  nav div.on { color: var(--coral); }
+  nav svg { width: 24px; height: 24px; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="shirt" viewBox="0 0 100 100"><path d="M36 14 L50 22 L64 14 L86 26 L78 44 L70 40 L70 88 L30 88 L30 40 L22 44 L14 26 Z" fill="currentColor"/><path d="M42 16 L50 30 L58 16" fill="none" stroke="rgba(0,0,0,.15)" stroke-width="2.5"/><path d="M50 30 V86" stroke="rgba(0,0,0,.12)" stroke-width="2"/></symbol>
+    <symbol id="pants" viewBox="0 0 100 100"><path d="M30 10 H70 L76 92 H56 L50 38 L44 92 H24 Z" fill="currentColor"/><path d="M30 18 H70" stroke="rgba(0,0,0,.18)" stroke-width="3"/></symbol>
+    <symbol id="jacket" viewBox="0 0 100 100"><path d="M34 12 L50 20 L66 12 L88 28 L82 88 L18 88 L12 28 Z" fill="currentColor"/><path d="M50 20 V88 M38 14 L50 44 L62 14" fill="none" stroke="rgba(0,0,0,.2)" stroke-width="2.5"/></symbol>
+    <symbol id="shoe" viewBox="0 0 100 100"><path d="M10 60 C10 46 22 40 30 40 L44 44 C52 50 62 54 76 56 C88 58 92 64 92 72 L92 76 H10 Z" fill="currentColor"/><path d="M10 76 H92" stroke="rgba(0,0,0,.25)" stroke-width="5"/></symbol>
+  </defs>
+</svg>
+
+<div class="phone">
+  <div class="status"><span>2:47</span><span>●●● ▮</span></div>
+  <div class="scroll">
+
+    <header>
+      <div>
+        <h1>Hi Sofia</h1>
+        <p>Let's find things that suit you.</p>
+      </div>
+      <div class="avatar">S</div>
+    </header>
+
+    <!-- Active trip -->
+    <div class="trip">
+      <span class="live">Trip in progress</span>
+      <h2>Shopping trip</h2>
+      <div class="meta">Started 2:10 PM <span class="chip">Goal: versatile basics</span></div>
+      <button class="cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
+        Check an item
+      </button>
+      <button class="done">Done shopping</button>
+    </div>
+
+    <!-- Bought this trip -->
+    <section>
+      <div class="sh"><h3>Bought this trip (2)</h3></div>
+      <div class="bought">
+        <div class="item">
+          <div class="tile" style="background:#F2F4F7;color:#FFFFFF"><span class="tag">Bought</span><svg style="filter:drop-shadow(0 2px 3px rgba(0,0,0,.15))"><use href="#shirt"/></svg></div>
+          <div class="name">White oxford shirt</div>
+          <div class="sub">Goes with almost anything</div>
+        </div>
+        <div class="item">
+          <div class="tile" style="background:#E9EDF5;color:#23324D"><span class="tag">Bought</span><svg><use href="#pants"/></svg></div>
+          <div class="name">Navy chinos</div>
+          <div class="sub">Pairs with the oxford</div>
+        </div>
+        <div class="item">
+          <div class="tile add">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Check another
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent verdicts -->
+    <section>
+      <div class="sh"><h3>Recent verdicts</h3></div>
+
+      <div class="verdict">
+        <div class="vthumb" style="background:#EEF2EA;color:#6B7A55"><svg><use href="#jacket"/></svg></div>
+        <div class="vbody">
+          <div class="vtop"><strong>Olive overshirt</strong><span class="pill buy">Buy it</span></div>
+          <p class="why">Olive flatters your warm skin, and it layers over the white oxford you just bought.</p>
+          <p class="time">2:41 PM</p>
+        </div>
+      </div>
+
+      <div class="verdict">
+        <div class="vthumb" style="background:#FBEFEF;color:#C0392B"><svg><use href="#shirt"/></svg></div>
+        <div class="vbody">
+          <div class="vtop"><strong>Red polo</strong><span class="pill close">Close</span></div>
+          <p class="why">Good fit for your shape, but bright red is loud for minimal style. Look for it in
+            <span class="swatches"><i style="background:#23324D"></i><i style="background:#6B7A55"></i></span> navy or olive.</p>
+          <p class="time">2:32 PM</p>
+        </div>
+      </div>
+
+      <div class="verdict">
+        <div class="vthumb" style="background:#F4F1EC;color:#BFAE94"><svg><use href="#pants"/></svg></div>
+        <div class="vbody">
+          <div class="vtop"><strong>Beige wide-leg trousers</strong><span class="pill skip">Skip it</span></div>
+          <p class="why">Too close to your skin tone, so it washes you out. You already have chinos for this trip.</p>
+          <p class="time">2:18 PM</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile -->
+    <section>
+      <div class="sh"><h3>Your profile</h3><a href="#">Edit</a></div>
+      <div class="profile">
+        <div class="prow">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="2.5"/><path d="M8 21V11h8v10M8 11 6 15M16 11l2 4"/></svg></div>
+          <div><div class="plabel">Body shape</div><div class="pval">Rectangle · 5′10″</div></div>
+        </div>
+        <div class="prow">
+          <div class="skin"></div>
+          <div><div class="plabel">Skin tone</div><div class="pval">Warm medium</div></div>
+        </div>
+        <div class="prow">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2 8 12.7 4 8.8 9.5 8z"/></svg></div>
+          <div>
+            <div class="plabel">Style</div>
+            <div class="styles">
+              <span class="style"><span style="background:linear-gradient(135deg,#F5F5F5 50%,#D9D9D9 50%)"></span>Minimal</span>
+              <span class="style"><span style="background:linear-gradient(135deg,#23324D 50%,#E9E2D6 50%)"></span>Smart casual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <nav>
+    <div class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Profile</div>
+  </nav>
+</div>
+
+</body>
+</html>

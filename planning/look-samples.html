@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Look and Feel Samples</title>
+<style>
+  :root { --bg:#eeece8; --ink:#1f1d1a; --muted:#6b665e; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#141412; --ink:#ece8e1; --muted:#a39d93; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:1180px; margin:0 auto; padding:36px 16px 60px; }
+  h1 { margin:0 0 6px; font-size:28px; }
+  .intro { color:var(--muted); max-width:720px; margin:0 0 8px; }
+  .dims { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 28px; }
+  .dims span { font-size:13px; padding:4px 10px; border:1px solid var(--muted); border-radius:999px; color:var(--muted); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:24px; }
+  .opt h2 { font-size:18px; margin:0 0 2px; }
+  .opt .what { font-size:14px; color:var(--muted); margin:0 0 12px; min-height:66px; }
+  .phone { border-radius:28px; padding:22px 18px 20px; min-height:500px; box-shadow:0 10px 30px rgba(0,0,0,.12); display:flex; flex-direction:column; gap:12px; }
+  .top { font-size:12px; opacity:.6; }
+  .verdict { font-size:34px; line-height:1.1; }
+  .item { font-size:13px; opacity:.7; }
+  .why p { margin:0 0 8px; font-size:14px; }
+  .instead { padding:12px; display:flex; gap:10px; align-items:center; font-size:14px; }
+  .sw { width:34px; height:34px; flex:none; }
+  .btns { margin-top:auto; display:flex; gap:8px; }
+  .btns div { flex:1; text-align:center; padding:11px 0; font-size:14px; }
+
+  /* A: Calm & clean */
+  .a { background:#fbfaf8; color:#1d1d1b; font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  .a .verdict { font-weight:600; color:#3d6b57; }
+  .a .instead { border:1px solid #e5e2dc; border-radius:10px; }
+  .a .sw { background:#1f2f4a; border-radius:6px; }
+  .a .btns div { border:1px solid #1d1d1b; border-radius:8px; }
+  .a .btns div:first-child { background:#1d1d1b; color:#fff; }
+
+  /* B: Warm & friendly */
+  .b { background:#fff4e8; color:#3a2a20; font-family:ui-rounded,"SF Pro Rounded","Nunito","Trebuchet MS",sans-serif; }
+  .b .verdict { font-weight:800; color:#c2562f; }
+  .b .why { background:#fff; border-radius:16px; padding:12px; }
+  .b .instead { background:#ffe3cc; border-radius:16px; }
+  .b .sw { background:#1f2f4a; border-radius:50%; }
+  .b .btns div { border-radius:999px; background:#fff; }
+  .b .btns div:first-child { background:#c2562f; color:#fff; }
+
+  /* C: Bold & confident */
+  .c { background:#111214; color:#f2f2f2; font-family:"Arial Black","Helvetica Neue",Arial,sans-serif; }
+  .c .verdict { font-size:46px; font-weight:900; color:#ffcc33; letter-spacing:-.02em; }
+  .c .why p { font-family:-apple-system,Arial,sans-serif; color:#cfcfd2; }
+  .c .instead { background:#1e2024; border-left:4px solid #ffcc33; font-family:-apple-system,Arial,sans-serif; }
+  .c .sw { background:#2b4470; border:2px solid #fff; }
+  .c .btns div { background:#1e2024; font-family:-apple-system,Arial,sans-serif; font-weight:700; }
+  .c .btns div:first-child { background:#ffcc33; color:#111; }
+
+  /* D: Boutique / magazine */
+  .d { background:#f3ede4; color:#2a2622; font-family:-apple-system,Arial,sans-serif; }
+  .d .verdict { font-family:Georgia,"Times New Roman",serif; font-style:italic; font-weight:400; font-size:40px; }
+  .d .top { letter-spacing:.2em; text-transform:uppercase; }
+  .d .why { border-top:1px solid #2a2622; border-bottom:1px solid #2a2622; padding:12px 0 4px; }
+  .d .instead { padding:6px 0; }
+  .d .sw { background:#1f2f4a; }
+  .d .btns div { border:1px solid #2a2622; text-transform:uppercase; letter-spacing:.12em; font-size:12px; }
+  .d .btns div:first-child { background:#2a2622; color:#f3ede4; }
+
+  .note { margin-top:32px; color:var(--muted); font-size:14px; max-width:720px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Four directions for the same verdict screen</h1>
+  <p class="intro">The content is identical in all four: a "Close" verdict on a shirt. Only the look changes. You don't need to name a style. React to them: which feels like the app you'd want to open in a store? What would you take from one and put into another?</p>
+  <div class="dims"><span>Colors: muted, warm, or high-contrast</span><span>Type: plain, rounded, heavy, or elegant serif</span><span>Shapes: sharp corners or soft and round</span><span>Density: airy or punchy</span></div>
+
+  <div class="grid">
+    <section class="opt">
+      <h2>A · Calm &amp; clean</h2>
+      <p class="what">Off-white, plain modern type, one quiet green accent, a lot of empty space. It feels like a sensible, quiet friend.</p>
+      <div class="phone a">
+        <div class="top">Shopping trip · 1 item bought</div>
+        <div class="verdict">Close</div>
+        <div class="item">Light grey oxford shirt</div>
+        <div class="why"><p>The fit suits your build, and it's simple, like you prefer.</p><p>Light grey washes out against your skin tone.</p></div>
+        <div class="instead"><div class="sw"></div><div>Look for it in <b>navy</b>. It goes with the pants you bought.</div></div>
+        <div class="btns"><div>Check another</div><div>Mark bought</div></div>
+      </div>
+    </section>
+
+    <section class="opt">
+      <h2>B · Warm &amp; friendly</h2>
+      <p class="what">Cream and terracotta, rounded letters, soft pill buttons. It feels encouraging and casual, like a friend cheering you on.</p>
+      <div class="phone b">
+        <div class="top">Shopping trip · 1 item bought</div>
+        <div class="verdict">Close!</div>
+        <div class="item">Light grey oxford shirt</div>
+        <div class="why"><p>The fit suits your build, and it's simple, like you prefer.</p><p>Light grey washes out against your skin tone.</p></div>
+        <div class="instead"><div class="sw"></div><div>Look for it in <b>navy</b>. It goes with the pants you bought.</div></div>
+        <div class="btns"><div>Check another</div><div>Mark bought</div></div>
+      </div>
+    </section>
+
+    <section class="opt">
+      <h2>C · Bold &amp; confident</h2>
+      <p class="what">Dark background, huge heavy verdict, a bright yellow accent. You can read it at a glance in a busy store, and it feels decisive.</p>
+      <div class="phone c">
+        <div class="top">Shopping trip · 1 item bought</div>
+        <div class="verdict">CLOSE</div>
+        <div class="item">Light grey oxford shirt</div>
+        <div class="why"><p>The fit suits your build, and it's simple, like you prefer.</p><p>Light grey washes out against your skin tone.</p></div>
+        <div class="instead"><div class="sw"></div><div>Look for it in <b>navy</b>. It goes with the pants you bought.</div></div>
+        <div class="btns"><div>Check another</div><div>Mark bought</div></div>
+      </div>
+    </section>
+
+    <section class="opt">
+      <h2>D · Boutique / magazine</h2>
+      <p class="what">Beige, elegant italic serif headline, thin lines, square buttons. It feels like a stylist at a nice shop, a bit more "fashion."</p>
+      <div class="phone d">
+        <div class="top">Shopping trip · 1 item bought</div>
+        <div class="verdict">Close</div>
+        <div class="item">Light grey oxford shirt</div>
+        <div class="why"><p>The fit suits your build, and it's simple, like you prefer.</p><p>Light grey washes out against your skin tone.</p></div>
+        <div class="instead"><div class="sw"></div><div>Look for it in <b>navy</b>. It goes with the pants you bought.</div></div>
+        <div class="btns"><div>Check another</div><div>Mark bought</div></div>
+      </div>
+    </section>
+  </div>
+  <p class="note">Notice the navy square next to "navy" in every version. That's the "show, don't name" idea in action. These are rough samples for reacting to, not final designs.</p>
+</main>
+</body>
+</html>

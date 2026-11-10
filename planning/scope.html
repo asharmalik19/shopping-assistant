@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopping Assistant Scope</title>
+<style>
+  :root {
+    --bg: #f7f5f1; --surface: #ffffff; --ink: #1f1d1a; --muted: #6b665e;
+    --line: #e4dfd6; --accent: #2f5d50; --accent-soft: #e3eee9;
+    --skip: #a23b2a; --skip-soft: #f6e3df;
+    --close: #a06a12; --close-soft: #f7ecd6;
+    --buy: #2f6b3a; --buy-soft: #e1efe3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161513; --surface: #1f1e1b; --ink: #ece8e1; --muted: #a39d93;
+      --line: #34312c; --accent: #8cc4b0; --accent-soft: #23332d;
+      --skip: #e8846f; --skip-soft: #3a2420;
+      --close: #e2b45e; --close-soft: #382c17;
+      --buy: #8fd09b; --buy-soft: #1f3323;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 820px; margin: 0 auto; padding: 40px 16px 80px; }
+  .status {
+    display: inline-block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 999px; background: var(--close-soft); color: var(--close);
+    font-weight: 600;
+  }
+  h1 { font-size: 32px; line-height: 1.2; margin: 12px 0 8px; }
+  .lede { font-size: 18px; color: var(--muted); margin: 0 0 32px; }
+  h2 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 40px 0 12px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; }
+  .kernel { border-left: 4px solid var(--accent); }
+  .kernel p { margin: 0 0 14px; font-size: 17px; }
+  .verdicts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; }
+  .v { border-radius: 10px; padding: 12px; font-size: 14px; }
+  .v b { display: block; font-size: 15px; margin-bottom: 2px; }
+  .v.skip { background: var(--skip-soft); color: var(--skip); }
+  .v.close { background: var(--close-soft); color: var(--close); }
+  .v.buy { background: var(--buy-soft); color: var(--buy); }
+  .v span { color: var(--ink); opacity: .8; }
+  blockquote { margin: 14px 0 0; padding-left: 14px; border-left: 3px solid var(--line); color: var(--muted); font-style: italic; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { fill: var(--ink); font-family: inherit; }
+  svg .sub { fill: var(--muted); font-size: 12px; }
+  svg .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+  svg .box.hl { stroke: var(--accent); stroke-width: 2; fill: var(--accent-soft); }
+  svg .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  svg .tag { fill: var(--muted); font-size: 11px; letter-spacing: .08em; }
+  .steps { list-style: none; padding: 0; margin: 16px 0 0; counter-reset: s; }
+  .steps li { counter-increment: s; padding: 8px 0 8px 36px; position: relative; border-top: 1px solid var(--line); }
+  .steps li:first-child { border-top: 0; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 9px; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .done { font-size: 17px; }
+  .done .beat { margin-top: 12px; padding: 12px 14px; background: var(--accent-soft); border-radius: 8px; color: var(--ink); font-size: 15px; }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 14px 20px; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 10px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; margin-left: auto; color: var(--muted); font-weight: 400; font-size: 20px; }
+  details[open] summary::after { content: "–"; }
+  .pill { font-size: 12px; padding: 2px 9px; border-radius: 999px; font-weight: 600; }
+  .pill.now { background: var(--buy-soft); color: var(--buy); }
+  .pill.later { background: var(--close-soft); color: var(--close); }
+  .pill.cut { background: var(--skip-soft); color: var(--skip); }
+  details ul { margin: 0; padding: 0 20px 16px 40px; }
+  details li { margin: 6px 0; }
+  details p { margin: 0; padding: 0 20px 16px; color: var(--muted); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .two .card p { margin: 0; }
+  footer { margin-top: 48px; font-size: 13px; color: var(--muted); }
+  code { font-size: 13px; background: var(--line); padding: 1px 5px; border-radius: 4px; }
+  @media (max-width: 600px) {
+    h1 { font-size: 26px; }
+    .verdicts, .two { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <span class="status">Approved</span>
+  <h1>Shopping Assistant</h1>
+  <p class="lede">An in-store helper for people who don't think about clothes. Photograph an item and it tells you, in plain language, whether to buy it, skip it, or look for a variation.</p>
+
+  <h2>The kernel: what makes this different</h2>
+  <div class="card kernel">
+    <p>It gives a <strong>clear, personal verdict</strong> because it already knows your body, skin tone, height, style, and what you're shopping for today.</p>
+    <div class="verdicts">
+      <div class="v skip"><b>Skip it</b><span>Too far off; leave it on the rack.</span></div>
+      <div class="v close"><b>Close</b><span>Good item, wrong detail: "look for it in navy or olive."</span></div>
+      <div class="v buy"><b>Buy it</b><span>Fits you, your style, and the occasion.</span></div>
+    </div>
+    <p style="margin:14px 0 0">No jargon. When it does use a term (a color name, a collar style), it <strong>shows</strong> you what that means instead of just naming it.</p>
+  </div>
+
+  <h2>The core loop</h2>
+  <div class="card">
+    <svg viewBox="0 0 760 250" role="img" aria-label="Diagram: one-time profile and per-trip goal feed into the in-store loop of photo, verdict, explanation; purchases go into trip memory, which feeds back into later verdicts.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="color:var(--muted)"/>
+        </marker>
+      </defs>
+      <text x="20" y="22" class="tag">ONCE</text>
+      <rect class="box" x="20" y="32" width="170" height="66" rx="10"/>
+      <text x="36" y="60" font-weight="600" font-size="15">Your profile</text>
+      <text x="36" y="80" class="sub">body photos · height · style</text>
+
+      <text x="20" y="140" class="tag">EACH TRIP · OPTIONAL</text>
+      <rect class="box" x="20" y="150" width="170" height="66" rx="10"/>
+      <text x="36" y="178" font-weight="600" font-size="15">Trip goal</text>
+      <text x="36" y="198" class="sub">versatile, or a specific need</text>
+
+      <text x="250" y="22" class="tag">IN THE STORE, ITEM BY ITEM</text>
+      <rect class="box" x="250" y="90" width="130" height="66" rx="10"/>
+      <text x="266" y="118" font-weight="600" font-size="15">Photo</text>
+      <text x="266" y="138" class="sub">of the item</text>
+
+      <rect class="box hl" x="420" y="90" width="150" height="66" rx="10"/>
+      <text x="436" y="118" font-weight="600" font-size="15">Verdict</text>
+      <text x="436" y="138" class="sub">skip · close · buy</text>
+
+      <rect class="box" x="610" y="90" width="130" height="66" rx="10"/>
+      <text x="626" y="118" font-weight="600" font-size="15">Explain</text>
+      <text x="626" y="138" class="sub">plain words + visuals</text>
+
+      <rect class="box" x="420" y="190" width="150" height="50" rx="10"/>
+      <text x="436" y="212" font-weight="600" font-size="14">Trip memory</text>
+      <text x="436" y="230" class="sub">what you've bought</text>
+
+      <path class="arrow" d="M190 65 C 220 65, 220 110, 248 115" marker-end="url(#ah)"/>
+      <path class="arrow" d="M190 183 C 220 183, 220 135, 248 130" marker-end="url(#ah)"/>
+      <path class="arrow" d="M380 123 L 418 123" marker-end="url(#ah)"/>
+      <path class="arrow" d="M570 123 L 608 123" marker-end="url(#ah)"/>
+      <path class="arrow" d="M675 156 C 675 215, 610 215, 572 215" marker-end="url(#ah)"/>
+      <text x="640" y="236" class="sub">if you buy it</text>
+      <path class="arrow" d="M440 190 L 440 158" marker-end="url(#ah)"/>
+      <text x="320" y="182" class="sub">shapes later verdicts</text>
+    </svg>
+    <ol class="steps">
+      <li><strong>Once:</strong> set up a profile with faceless body photos, height, and style ("minimal but stylish, not over the top, not old-fashioned").</li>
+      <li><strong>Each trip (optional detail):</strong> by default the goal is "good clothes I can wear for many occasions." If there's a specific need, say so, e.g. "semi-formal for conferences, dates, office parties: shirts, a pant, shoes."</li>
+      <li><strong>Item by item:</strong> take a photo and get the verdict and a plain explanation, with visuals for anything unfamiliar.</li>
+      <li><strong>During the trip:</strong> it remembers what you bought, so later verdicts take it into account ("this pant works with the shirt you bought earlier").</li>
+    </ol>
+  </div>
+
+  <h2>Who it's for</h2>
+  <div class="two">
+    <div class="card"><p>Anyone who doesn't think about clothes, starting with you. Nothing is hard-coded to one person: each user gives it their own context.</p></div>
+    <div class="card"><p>What they do today is wander for hours, then leave with nothing or buy something "just for the sake of buying." Generic AI was too vague and full of jargon.</p></div>
+  </div>
+  <blockquote>"If it can work for me, why wouldn't it work for others if they have the same problem as mine?"</blockquote>
+
+  <h2>What "working" looks like</h2>
+  <div class="card done">
+    With a profile set up, you photograph an item on your phone and get a verdict you understand and trust.
+    <div class="beat"><strong>The "oh, that's cool" beat:</strong> "This would work, but in navy instead," with a swatch showing what navy looks like. Then a later item's verdict mentions the shirt you bought earlier.</div>
+  </div>
+
+  <h2>Boundary</h2>
+  <details open>
+    <summary><span class="pill now">Now</span> In the proof of concept</summary>
+    <ul>
+      <li>Works for any user: each person sets up their own profile, so a friend can get verdicts about <em>their</em> body and style</li>
+      <li>Usable on a phone in the store: take a photo, read the verdict</li>
+      <li>One-time profile: faceless body photos, height, style preferences</li>
+      <li>A flexible goal for each trip: defaults to "versatile clothes for many occasions," with an optional specific occasion or item list</li>
+      <li>Photo → skip / close-with-change / buy verdict and a plain explanation</li>
+      <li>Visual explanation of jargon (colors, cuts, collar styles)</li>
+      <li>Memory of what you bought on the current trip only</li>
+    </ul>
+  </details>
+  <details>
+    <summary><span class="pill later">Later</span> Worth doing, not now</summary>
+    <ul>
+      <li><strong>Knowing your wardrobe:</strong> needs a full catalog up front and a second matching system before the core is proven.</li>
+      <li><strong>Privacy and public sign-up:</strong> accounts, private storage of body photos, hosting for strangers.</li>
+      <li><strong>Distribution:</strong> a hosted web app vs. open source people run themselves (which helps with privacy).</li>
+    </ul>
+  </details>
+  <details>
+    <summary><span class="pill cut">Cut</span> Dropped entirely</summary>
+    <p>Nothing cut outright. Everything outside the boundary is under Later.</p>
+  </details>
+
+  <h2>Why this matters</h2>
+  <div class="card"><p style="margin:0">"I just want to solve this problem… Build a solution, build an effective solution, whatever that might be."</p></div>
+
+  <footer>Companion view of <code>planning/scope.md</code>, which is the canonical version.</footer>
+</main>
+</body>
+</html>
