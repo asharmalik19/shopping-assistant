@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopping Assistant PRD</title>
+<style>
+  :root {
+    --bg: #fff4e8; --surface: #ffffff; --ink: #3a2a20; --muted: #85705f;
+    --line: #f0dcc8; --accent: #c2562f; --accent-soft: #ffe3cc;
+    --skip: #9c3b2a; --skip-soft: #f8e1da;
+    --close: #9a6512; --close-soft: #fbecd2;
+    --buy: #2f6b3a; --buy-soft: #e2f0e2;
+    --navy: #1f2f4a; --olive: #6b7a55;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1612; --surface: #261e18; --ink: #f3e6da; --muted: #b59f8c;
+      --line: #3d3027; --accent: #ef8a62; --accent-soft: #3d2619;
+      --skip: #ee8f7a; --skip-soft: #3b231d; --close: #e6b866; --close-soft: #392c17;
+      --buy: #93d39d; --buy-soft: #1f3223; --navy: #6f8fc4; --olive: #a8b98c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c1612; --surface: #261e18; --ink: #f3e6da; --muted: #b59f8c;
+    --line: #3d3027; --accent: #ef8a62; --accent-soft: #3d2619;
+    --skip: #ee8f7a; --skip-soft: #3b231d; --close: #e6b866; --close-soft: #392c17;
+    --buy: #93d39d; --buy-soft: #1f3223; --navy: #6f8fc4; --olive: #a8b98c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 ui-rounded, "SF Pro Rounded", "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+  .status { display: inline-block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 999px; background: var(--close-soft); color: var(--close); font-weight: 700; }
+  h1 { font-size: 32px; line-height: 1.2; margin: 12px 0 8px; }
+  .lede { font-size: 18px; color: var(--muted); margin: 0 0 28px; }
+  h2 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 44px 0 12px; }
+  h3 { margin: 0 0 6px; font-size: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px 22px; }
+  .grow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grow .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .grow .card b { color: var(--ink); }
+  code { font-size: 13px; background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; }
+  svg.journey { width: 100%; height: auto; display: block; }
+  svg text { fill: var(--ink); font-family: inherit; font-size: 13px; }
+  svg .sub { fill: var(--muted); font-size: 11px; }
+  svg .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+  svg .box.hl { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
+  svg .box.new { fill: var(--close-soft); stroke: var(--close); stroke-width: 2; stroke-dasharray: 5 3; }
+  svg .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  svg .lbl { fill: var(--muted); font-size: 11px; }
+  .legend { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin: 0 4px 0 12px; }
+  /* stepper */
+  .stepper { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tabs button { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+  .tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .panel { display: contents; }
+  .js .panel[hidden] { display: none; }
+  .phone { background: var(--bg); border: 8px solid var(--ink); border-radius: 34px; padding: 18px 14px 20px; min-height: 520px;
+    box-shadow: 0 8px 24px rgba(58,42,32,.15); font-size: 14px; }
+  .phone .hi { font-size: 22px; font-weight: 800; margin: 6px 0 14px; }
+  .pbtn { display: block; width: 100%; text-align: center; border-radius: 999px; padding: 12px; font-weight: 700; margin: 8px 0; }
+  .pbtn.main { background: var(--accent); color: #fff; }
+  .pbtn.ghost { background: var(--surface); border: 1px solid var(--line); }
+  .sec { margin-top: 18px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .row { display: flex; gap: 10px; align-items: center; background: var(--surface); border-radius: 16px; padding: 10px; margin-top: 8px; }
+  .thumb { width: 42px; height: 42px; border-radius: 12px; flex: none; }
+  .row .t { flex: 1; line-height: 1.3; }
+  .row .t small { color: var(--muted); display: block; }
+  .x { color: var(--muted); font-size: 18px; }
+  .chip { font-size: 12px; border-radius: 999px; padding: 4px 10px; background: var(--accent-soft); color: var(--accent); font-weight: 700; white-space: nowrap; }
+  .verdict { font-size: 40px; font-weight: 800; color: var(--close); margin: 6px 0 0; }
+  .why { background: var(--surface); border-radius: 16px; padding: 10px 12px; margin-top: 10px; }
+  .why p { margin: 0 0 6px; } .why p:last-child { margin: 0; }
+  .instead { background: var(--close-soft); border-radius: 16px; padding: 10px 12px; margin-top: 10px; display: flex; gap: 10px; align-items: center; }
+  .sw { width: 26px; height: 26px; border-radius: 50%; flex: none; }
+  .dim { opacity: .35; }
+  .sheet { background: var(--surface); border-radius: 20px; padding: 16px; margin-top: 150px; box-shadow: 0 -4px 20px rgba(0,0,0,.12); text-align: center; }
+  .notes h3 { margin-top: 0; }
+  .notes ul { padding-left: 18px; margin: 8px 0; }
+  .notes li { margin: 4px 0; }
+  .crit { list-style: none; padding: 0; }
+  .crit li::before { content: "☐ "; color: var(--accent); }
+  /* behaviors */
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 0 18px; margin-bottom: 10px; }
+  details[open] { padding-bottom: 14px; }
+  summary { cursor: pointer; padding: 14px 0; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--accent); font-size: 20px; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  summary small { font-weight: 400; color: var(--muted); }
+  .tag-new { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; background: var(--close-soft); color: var(--close); border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: 2px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cols .card ul { margin: 6px 0 0; padding-left: 18px; }
+  .cols .card li { margin: 4px 0; }
+  .open li b { color: var(--accent); }
+  footer { margin-top: 48px; color: var(--muted); font-size: 14px; }
+  @media (max-width: 720px) {
+    .stepper, .grow, .cols { grid-template-columns: 1fr; }
+    .phone { max-width: 320px; margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <span class="status">Draft · for review</span>
+  <h1>Shopping Assistant — what it does</h1>
+  <p class="lede">The product, screen by screen: what you see, what you can do, and how you'd know it's working. Still the smallest version that proves the idea. The source of truth is <code>planning/prd.md</code>; this page is a friendlier way to read it.</p>
+
+  <h2>How the scope grew into this</h2>
+  <div class="grow">
+    <div class="card"><p>Scope said: <b>"the helper remembers what you've bought."</b><br>Now: a <b>Bought items</b> list on Home with a picture, name and a one-line note. You can delete a mistake (with a confirmation), and it's forgotten.</p></div>
+    <div class="card"><p>Scope said: <b>"close: look for it in X color."</b><br>Now: on a Close verdict you can choose <b>Keep looking</b>. It waits under <b>Still looking for</b> until you tap <b>Found it</b> in another store.</p></div>
+    <div class="card"><p>Scope said: <b>"set up a profile once."</b><br>Now: six short steps (name, body photos, skin photo, height, style cards) and a summary where you redo anything that's wrong.</p></div>
+    <div class="card"><p>Scope said: <b>"plain, direct, like a friend."</b><br>Now: the <b>Warm &amp; friendly</b> look (cream, terracotta, rounded letters, pill buttons), and Home greets you by name.</p></div>
+  </div>
+
+  <h2>The journey</h2>
+  <div class="card">
+    <svg class="journey" viewBox="0 0 780 360" role="img" aria-label="Journey: Welcome, build profile, summary, Home, Go shopping, check an item, verdict; then mark bought into Bought items or keep looking into Still looking for, Found it moves to Bought items; back to Home; Done shopping clears the trip.">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="currentColor" style="color:var(--muted)"/></marker></defs>
+      <text x="10" y="18" class="sub">ONCE</text>
+      <rect class="box" x="10" y="28" width="130" height="54" rx="14"/><text x="75" y="52" text-anchor="middle">Welcome</text><text x="75" y="68" text-anchor="middle" class="sub">what's involved</text>
+      <rect class="box" x="170" y="28" width="150" height="54" rx="14"/><text x="245" y="52" text-anchor="middle">Build profile</text><text x="245" y="68" text-anchor="middle" class="sub">name · photos · height · style</text>
+      <rect class="box" x="350" y="28" width="140" height="54" rx="14"/><text x="420" y="52" text-anchor="middle">Profile summary</text><text x="420" y="68" text-anchor="middle" class="sub">redo a wrong step</text>
+      <path class="arrow" d="M140 55 H166" marker-end="url(#ah)"/><path class="arrow" d="M320 55 H346" marker-end="url(#ah)"/>
+      <rect class="box hl" x="560" y="28" width="200" height="54" rx="14"/><text x="660" y="52" text-anchor="middle">Home · "Hi [name]"</text><text x="660" y="68" text-anchor="middle" class="sub">Go shopping</text>
+      <path class="arrow" d="M490 55 H556" marker-end="url(#ah)"/>
+      <text x="10" y="128" class="sub">EACH TRIP</text>
+      <rect class="box" x="560" y="140" width="200" height="50" rx="14"/><text x="660" y="162" text-anchor="middle">Anything specific today?</text><text x="660" y="178" text-anchor="middle" class="sub">optional · default: versatile</text>
+      <path class="arrow" d="M660 82 V136" marker-end="url(#ah)"/>
+      <rect class="box hl" x="330" y="140" width="190" height="50" rx="14"/><text x="425" y="162" text-anchor="middle">Check an item</text><text x="425" y="178" text-anchor="middle" class="sub">camera photo</text>
+      <path class="arrow" d="M560 165 H524" marker-end="url(#ah)"/>
+      <rect class="box hl" x="60" y="140" width="210" height="50" rx="14"/><text x="165" y="162" text-anchor="middle">Verdict</text><text x="165" y="178" text-anchor="middle" class="sub">Skip · Close · Buy, with why</text>
+      <path class="arrow" d="M330 165 H274" marker-end="url(#ah)"/>
+      <rect class="box" x="20" y="250" width="180" height="50" rx="14"/><text x="110" y="272" text-anchor="middle">Mark bought</text><text x="110" y="288" text-anchor="middle" class="sub">→ Bought items</text>
+      <rect class="box new" x="230" y="250" width="190" height="50" rx="14"/><text x="325" y="272" text-anchor="middle">Keep looking (Close)</text><text x="325" y="288" text-anchor="middle" class="sub">→ Still looking for</text>
+      <path class="arrow" d="M130 190 V246" marker-end="url(#ah)"/><path class="arrow" d="M210 190 Q300 215 320 246" marker-end="url(#ah)"/>
+      <path class="arrow" d="M300 300 Q200 340 130 304" marker-end="url(#ah)"/><text x="215" y="342" text-anchor="middle" class="lbl">Found it (another store)</text>
+      <rect class="box" x="560" y="250" width="200" height="50" rx="14"/><text x="660" y="272" text-anchor="middle">Done shopping</text><text x="660" y="288" text-anchor="middle" class="sub">clears the whole trip</text>
+      <path class="arrow" d="M420 275 Q480 230 540 120 Q548 100 560 90" marker-end="url(#ah)"/><text x="470" y="236" class="lbl">back to Home, check the next item</text>
+      <path class="arrow" d="M700 82 Q740 160 700 246" marker-end="url(#ah)"/>
+    </svg>
+    <div class="legend">Shaded: the core loop <i style="background:var(--accent-soft);border:1px solid var(--accent)"></i> · New in this round <i style="background:var(--close-soft);border:1px dashed var(--close)"></i></div>
+  </div>
+
+  <h2>Screens, one at a time</h2>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="panels">
+    <section class="panel" data-title="Home · no trip">
+      <div class="stepper">
+        <div class="phone">
+          <div class="hi">Hi Sofia</div>
+          <p style="color:var(--muted);margin:0 0 220px">Ready when you are.</p>
+          <span class="pbtn main">Go shopping</span>
+        </div>
+        <div class="notes">
+          <h3>Home, between trips</h3>
+          <ul><li>Greets you with the name from your profile.</li><li>One thing to do: <b>Go shopping</b>, which asks "anything specific today?" (skip it and the goal is versatile clothes).</li></ul>
+          <ul class="crit"><li>"Hi [name]" shows the name typed during setup.</li><li>With no trip, only the greeting and Go shopping show.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="panel" data-title="Home · during a trip">
+      <div class="stepper">
+        <div class="phone">
+          <div class="hi">Hi Sofia</div>
+          <span class="pbtn main">Check an item</span>
+          <span class="pbtn ghost">Done shopping</span>
+          <div class="sec">Bought items</div>
+          <div class="row"><div class="thumb" style="background:#f2f2ee"></div><div class="t">White oxford shirt<small>Goes with almost anything</small></div><span class="x" aria-label="delete">×</span></div>
+          <div class="row"><div class="thumb" style="background:var(--navy)"></div><div class="t">Navy chinos<small>Pairs with the oxford</small></div><span class="x" aria-label="delete">×</span></div>
+          <div class="sec">Still looking for</div>
+          <div class="row"><div class="thumb" style="background:#c9c9c4"></div><div class="t">Oxford shirt<small>in navy or olive</small></div><span class="chip">Found it</span></div>
+        </div>
+        <div class="notes">
+          <h3>Home, mid-trip</h3>
+          <ul>
+            <li><b>Check an item</b> opens the camera.</li>
+            <li><b>Bought items</b>: picture, short name, one-line note. Delete (×) asks first, and a deleted item is forgotten by later verdicts.</li>
+            <li><b>Still looking for</b>: the Close items you chose to keep. <b>Found it</b> moves one into Bought items.</li>
+            <li>Both sections stay hidden until they have something in them.</li>
+            <li>Closing the app doesn't lose any of this; only Done shopping clears it.</li>
+          </ul>
+          <ul class="crit"><li>Reopening the app mid-trip shows the same lists.</li><li>After Done shopping, Home is back to Go shopping.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="panel" data-title="Verdict · Close">
+      <div class="stepper">
+        <div class="phone">
+          <div style="color:var(--muted);font-size:12px">Shopping trip · 2 bought</div>
+          <div class="verdict">Close!</div>
+          <div>Light grey oxford shirt</div>
+          <div class="why"><p>The fit suits your build, and it's simple, like you prefer.</p><p>Light grey washes out against your skin tone.</p></div>
+          <div class="instead"><span class="sw" style="background:var(--navy)"></span><span class="sw" style="background:var(--olive)"></span><div>Look for it in <b>navy</b> or <b>olive</b>. It goes with the chinos you bought.</div></div>
+          <span class="pbtn main" style="margin-top:16px">Keep looking</span>
+          <span class="pbtn ghost">Mark bought</span>
+          <span class="pbtn ghost">Check another</span>
+        </div>
+        <div class="notes">
+          <h3>The verdict</h3>
+          <ul>
+            <li>One of three, big at the top: <b>Skip it</b>, <b>Close</b>, <b>Buy it</b>.</li>
+            <li>A few plain sentences: shape, color against your skin, your style, what you've bought this trip.</li>
+            <li>Unfamiliar words come with a swatch or small picture, never a generated image.</li>
+            <li><b>Keep looking</b> appears only on Close. Nothing is kept unless you choose it.</li>
+            <li>A blurry, dark, or non-clothing photo gets "Bad photo, try again."</li>
+          </ul>
+          <ul class="crit"><li>Every verdict shows exactly one outcome at the top.</li><li>Every color or style term has a visual beside it.</li><li>Close always says what to look for instead.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="panel" data-title="Delete a bought item">
+      <div class="stepper">
+        <div class="phone">
+          <div class="dim"><div class="hi">Hi Sofia</div><span class="pbtn main">Check an item</span><div class="sec">Bought items</div><div class="row"><div class="thumb" style="background:var(--navy)"></div><div class="t">Navy chinos</div></div></div>
+          <div class="sheet"><b>Remove Navy chinos from bought items?</b><p style="color:var(--muted);margin:6px 0 12px">Later verdicts won't count it.</p><span class="pbtn main">Remove</span><span class="pbtn ghost">Cancel</span></div>
+        </div>
+        <div class="notes">
+          <h3>Fixing a mistake</h3>
+          <ul><li>For a mis-tap, or an item put back at the till.</li><li>Always asks first. Once removed, it's forgotten.</li></ul>
+          <ul class="crit"><li>Cancel leaves the item in place.</li><li>After removing a shirt, a later verdict doesn't mention it.</li></ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <h2>Every behavior, with how you'd know it works</h2>
+  <details><summary><span>Building a profile <small>· name, photos, height, style</small></span></summary>
+    <p>One screen per step: name, faceless body photos, a skin photo, height, style. Photos do as much as possible; you only type what a photo can't show. Style is picture cards with captions plus a free-text box.</p>
+    <ul class="crit"><li>Finishing every step leads to the summary.</li><li>Tapped style cards look selected; the free text is kept.</li></ul></details>
+  <details><summary><span>Profile summary</span></summary>
+    <p>Shows the body, skin tone, and style the helper worked out. If something's wrong, you redo that step.</p>
+    <ul class="crit"><li>The summary matches the photos and answers given.</li><li>Redoing a step changes the summary.</li></ul></details>
+  <details><summary><span>Shopping trip <small>· start, remember, end</small></span></summary>
+    <p>Go shopping starts it (with the optional goal); Done shopping ends and clears it. Bought items count in every later verdict, and the trip survives closing the app.</p>
+    <ul class="crit"><li>After buying a shirt, a later pant verdict says whether they go together.</li><li>Reopening mid-trip shows everything intact.</li><li>After Done shopping, nothing carries over.</li></ul></details>
+  <details><summary><span>The verdict</span></summary>
+    <p>See the Verdict screen above. Skip / Close / Buy, plain reasons, visuals for unfamiliar terms, and the bad-photo message.</p>
+    <ul class="crit"><li>A photo of something that isn't clothing gets "Bad photo, try again", not a verdict.</li></ul></details>
+  <details><summary><span>Bought items</span></summary>
+    <p>Mark bought adds it with a picture, name, and note. Delete asks first and makes it forgotten.</p></details>
+  <details><summary><span>Still looking for <span class="tag-new">new</span></span></summary>
+    <p>For Close items you really like but can't get here. You choose Keep looking; it shows what to look for. Found it moves it into Bought items (showing the variation, e.g. "Oxford shirt, navy"). Gone at Done shopping.</p>
+    <ul class="crit"><li>Only Close verdicts offer Keep looking.</li><li>Found it removes it here and adds it to Bought items.</li></ul></details>
+
+  <h2>States and edges</h2>
+  <div class="cols">
+    <div class="card"><b>What you see when…</b><ul>
+      <li><b>First open, no profile:</b> Welcome.</li>
+      <li><b>No trip:</b> "Hi [name]" + Go shopping.</li>
+      <li><b>Trip, nothing bought yet:</b> no empty sections, just the buttons.</li>
+      <li><b>Bad photo:</b> "Bad photo, try again"; nothing added.</li></ul></div>
+    <div class="card"><b>What stays and what goes</b><ul>
+      <li><b>Stays:</b> your profile; the current trip, across closing the app.</li>
+      <li><b>Goes at Done shopping:</b> bought and kept items.</li>
+      <li><b>Goes right away:</b> checked items you didn't buy or keep; a bought item you remove.</li></ul></div>
+  </div>
+
+  <h2>In now, and not yet</h2>
+  <div class="cols">
+    <div class="card"><b>Building now</b><ul>
+      <li>Welcome, profile steps, summary</li><li>Home (two states), greeting by name</li><li>Trip start (optional goal) and Done shopping</li>
+      <li>Camera → verdict with reasons and visuals</li><li>Bought items (with delete)</li><li>Still looking for (Keep looking, Found it)</li><li>Warm &amp; friendly, phone-first</li></ul></div>
+    <div class="card"><b>Deferred or left out</b><ul>
+      <li>Your wardrobe at home</li><li>Accounts, privacy, public hosting</li><li>Editing your profile any time</li><li>A history of every verdict</li><li>Trip start time and goal tag on Home</li>
+      <li><i>Never:</i> try-on images, generated images, desktop layout, unexplained jargon</li></ul></div>
+  </div>
+
+  <h2>Still open (none block the next step)</h2>
+  <div class="card open"><ul style="margin:0;padding-left:18px">
+    <li><b>Button label:</b> "Check an item" or "shop item"?</li>
+    <li><b>Assumption:</b> you can Mark bought even on a Skip verdict, since it's your choice.</li>
+    <li><b>Assumption:</b> a kept item can't be removed mid-trip except by Found it; it clears at Done shopping.</li>
+  </ul></div>
+
+  <footer>Shopping Assistant · PRD draft · Markdown source: planning/prd.md</footer>
+</main>
+<script>
+  (function () {
+    var panels = document.querySelectorAll('#panels .panel');
+    var tabs = document.getElementById('tabs');
+    document.documentElement.classList.add('js');
+    panels.forEach(function (p, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('role', 'tab'); b.textContent = p.dataset.title;
+      b.addEventListener('click', function () { show(i); });
+      tabs.appendChild(b);
+    });
+    function show(n) {
+      panels.forEach(function (p, i) { p.hidden = i !== n; tabs.children[i].setAttribute('aria-selected', i === n); });
+    }
+    show(0);
+  })();
+</script>
+</body>
+</html>
